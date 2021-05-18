@@ -4,12 +4,22 @@ import "semantic-ui-css/semantic.min.css";
 import { Button, Container, Dimmer, Grid, GridRow, Image, Input, Loader, Segment } from 'semantic-ui-react';
 import "./../../assets/css/main.scss"
 import mainlogo from "./../../assets/img/main_logo.png";
+import { useQuery, gql, useMutation } from '@apollo/client';
 var url = window.location.search;
 var params = new URLSearchParams(url);
 
 interface SetupProps {
     nickname?: String;
 }
+
+const UPDATEUSER = gql`
+    mutation UpdateUser($username: String!, $group: String!, $audio: Boolean!, $talking: Boolean!, $active: Boolean!) {
+        updateUser(username: $username, group: $group, audio: $audio, talking: $talking, active: $active) {
+            username, group, audio, talking, active
+        }
+    }
+`
+
 
 const SetupPage = (props: any) => {
     var nickname = params.get("nickname");
@@ -22,8 +32,20 @@ const SetupPage = (props: any) => {
         });
     }
 
+    const [updateUser] = useMutation(UPDATEUSER, {
+        variables: { username: nickname, group: groupName, audio: mute, talking: false, active: false }    
+    });
+
     const callPage = () => {
-        window.location.replace("/session?nickname=" + nickname + "&group=" + groupName);
+        var muted = mute ? 1 : 0;
+        updateUser().then(() => {
+            window.location.replace("/session?nickname=" + nickname + "&group=" + groupName + "&audio=" + muted);
+        });
+    }
+
+    const muteDevice = () => {
+        updateUser();
+        setMute(!mute);
     }
 
     return (
@@ -39,9 +61,7 @@ const SetupPage = (props: any) => {
                         <Grid.Column width="10">
                             <Segment className="purple" raised>
                                 <div className="personal-space">
-                                    <Button className="orange" fluid basic onClick={ () => {
-                                        setMute(!mute);
-                                    }}>{mute ? "Unmute" : "Mute"}</Button>
+                                    <Button className="orange" fluid basic onClick={muteDevice}>{mute ? "Unmute" : "Mute"}</Button>
                                 </div>
                                 <div className="personal-space">
                                     <Button className="orange" fluid onClick={callPage}>Continue</Button>

@@ -4,12 +4,28 @@ import "semantic-ui-css/semantic.min.css";
 import { Button, Container, Dimmer, Grid, GridRow, Image, Input, Loader, Segment } from 'semantic-ui-react';
 import "./../../assets/css/main.scss"
 import mainlogo from "./../../assets/img/main_logo.png";
+import { useQuery, gql, useMutation } from '@apollo/client';
+
+const JOINUSER = gql`
+    mutation CreateUser($username: String!, $group: String!, $audio: Boolean!, $talking: Boolean!, $active: Boolean!) {
+        createUser(username: $username, group: $group, audio: $audio, talking: $talking, active: $active) {
+            username, group, audio, talking, active
+        }
+    }
+`
+
 
 const JoinPage = (props: any) => {
     const [nickname, setNickname] = useState("");
     const groupName = "talkproject";
+    const [createUser] = useMutation(JOINUSER, {
+        variables: { username: nickname, group: groupName, audio: false, talking: false, active: false }    
+    });
+
     const join = () => {
-        window.location.replace("/setup?nickname=" + nickname + "&group=" + groupName);
+        createUser().then(() => {
+            window.location.replace("/setup?nickname=" + nickname + "&group=" + groupName);
+        });
     }
 
     return (

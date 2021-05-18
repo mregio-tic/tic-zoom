@@ -1,7 +1,6 @@
 import cors from "cors";
 import "dotenv/config"; //To use .env
 import express from "express";
-import * as http from "http";
 import {ApolloServer} from "apollo-server-express";
 import sequelize from "./dbservices/dbcontext";
 import typeDefinition from "./typedefs";
@@ -33,3 +32,4 @@ app.listen(port, () => {
         
     });
 });
+

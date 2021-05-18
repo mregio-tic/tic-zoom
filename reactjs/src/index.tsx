@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import Main from './main';
 import reportWebVitals from './reportWebVitals';
 import {onError} from "@apollo/client/link/error";
-
+import * as https from "https";
 //graphql server
 const errorLink = onError(({ graphQLErrors, networkError}) => {
   if(graphQLErrors) {
@@ -16,7 +16,7 @@ const errorLink = onError(({ graphQLErrors, networkError}) => {
 })
 const link = from([
   errorLink,
-  new HttpLink({uri: "http://localhost:3001/graphql"})
+  new HttpLink({uri: "http://10.169.2.4:3001/graphql", credentials: "same-origin", fetchOptions: { agent: new https.Agent({ rejectUnauthorized: false }) }}),
 ])
 const client = new ApolloClient({
   link: link,

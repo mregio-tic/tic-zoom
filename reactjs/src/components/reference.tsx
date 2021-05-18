@@ -33,7 +33,6 @@ const WelcomePage = () => {
         }
         
     }
-
     
     var renderData = ""
     console.log(getAllUserQuery.data);

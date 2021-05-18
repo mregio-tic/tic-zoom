@@ -6,4 +6,5 @@ export class User extends Model{
     @Column group!: string
     @Column audio!: boolean
     @Column talking!: boolean
+    @Column active!: boolean
 }
