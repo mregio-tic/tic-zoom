@@ -16,7 +16,7 @@ const errorLink = onError(({ graphQLErrors, networkError}) => {
 })
 const link = from([
   errorLink,
-  new HttpLink({uri: "http://10.169.2.4:3001/graphql", credentials: "same-origin", fetchOptions: { agent: new https.Agent({ rejectUnauthorized: false }) }}),
+  new HttpLink({uri: "https://tic-zoom-api.herokuapp.com/graphql"}),
 ])
 const client = new ApolloClient({
   link: link,
