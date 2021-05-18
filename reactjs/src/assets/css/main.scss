@@ -1,6 +1,63 @@
-$backgroundColor: #5D2265;
-
+$backgroundColor: #713378;
+$segmentColor: #713378;
+$stackColor: #fff;
+$stackActive: #c5540f;
+$textColor: #fff;
+$secondaryColor: #000;
 body {
     background-color: $backgroundColor;
 }
 
+.container {
+    margin-top:20px;
+}
+
+.mainLogo {
+    margin: "auto";
+    padding-left: 100px; 
+    padding-right: 100px;
+    height: 100%;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+.personal-space{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.title {
+    color: $textColor;
+}
+
+.name {
+    color: $secondaryColor;
+    text-align: center;
+}
+
+.card {
+    background-color: $stackColor;
+    padding: 10px;
+    width: 300px;
+    margin:5px;
+}
+
+.card-talking {
+    background-color: $stackActive;
+    padding: 10px;
+    width: 300px;
+    margin:5px;
+}
+
+.controls {
+    position: absolute;
+    width:100%;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin-bottom: 20px;
+}
+
+.controlButtons { 
+    
+}

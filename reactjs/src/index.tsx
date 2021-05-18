@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Main from './main';
 import reportWebVitals from './reportWebVitals';
 import {onError} from "@apollo/client/link/error";
+
 //graphql server
 const errorLink = onError(({ graphQLErrors, networkError}) => {
   if(graphQLErrors) {
