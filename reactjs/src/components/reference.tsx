@@ -11,14 +11,34 @@ const GETALLUSERS = gql`
         }
     }
 `
+var _username = "superadmin"
+const GETONEUSER = gql`
+    query GetOneUser($username: String!) {
+        getOneUser(username: $username) {
+            username
+        }
+    }
+`
 
 
 const WelcomePage = () => {
-    const { loading, error, data } = useQuery(GETALLUSERS); //{pollInterval: 1000}
-    var renderData = "";
-    console.log(data);
-    if (data) {
-        data.getAllUsers.map((item: any) => {
+    const getAllUserQuery = useQuery(GETALLUSERS); //{pollInterval: 1000}
+    const getOneUserQuery = useQuery(GETONEUSER, {
+        variables: { username: _username }    
+    });
+
+    if (!getOneUserQuery.loading) {
+        if (getOneUserQuery.data.getOneUser) {
+            alert(getOneUserQuery.data.getOneUser.username);
+        }
+        
+    }
+
+    
+    var renderData = ""
+    console.log(getAllUserQuery.data);
+    if (getAllUserQuery.data) {
+        getAllUserQuery.data.getAllUsers.map((item: any) => {
             if (item !== null)
                 renderData += (item.username + "<br>")
         });
