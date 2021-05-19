@@ -61,22 +61,30 @@ const SessionPage = (props: any) => {
     updateUser();
 
     const getAllUserQuery = useQuery(GETALLUSERS);
-    const getAllUserCount = useQuery(GETALLUSERS, { pollInterval: 3000 });
+    const getAllUserCount = useQuery(GETALLUSERS);
 
     if (getAllUserCount.data) {
-        if (getAllUserCount.data.getAllUsers.length !== session.totalMembers) {
+       
+        if (Number(getAllUserCount.data.getAllUsers.length) != session.totalMembers) {
             if (getAllUserQuery.data) {
                 getAllUserQuery.data.getAllUsers.map((item: any) => {
                     if (item.active) {
+                        session.totalMembers += 1;
                         members.push(item);
                     }
                 });
+                
                 session.totalMembers = members.length;
                 members.sort();
             }
             //call peers
             callservice.connectToEveryone(session.members);
+        } else {
+            session.totalMembers = Number(getAllUserCount.data.getAllUsers.length);
         }
+
+        console.log("SERVER USERS", Number(getAllUserCount.data.getAllUsers.length));
+        console.log("CURRENT USERS", session.totalMembers);
     }
 
 
