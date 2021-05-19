@@ -108,14 +108,25 @@ export const connectToEveryone = (members: any) => {
 
 export const reconnectToEveryone = (members: any) => {
     var response = false;
-    console.log("Calling All");
     getAudioPermissions(
         async (mediaStream: any) => {
             members.map((item: any) => {
                 if (item.username !== localStorage.getItem("userid")) {
                     var videoContainer: any = document.getElementById(item.username);
                     if (videoContainer.srcObject !== null) {
-                        videoContainer.load();
+                        //TODO: when others refresh the feed hangs
+                        
+                        console.log(item.username, videoContainer.currentTime)
+                        videoContainer.play();
+                    } else {
+                        var call = peer.call(item.username, mediaStream);
+                        call.on("stream", async (stream: any) => {
+                            videoContainer.srcObject = stream;
+                            videoContainer.onloadedmetadata = function (e: any) {
+                                videoContainer.play();
+                            };
+                            videoContainer.load();
+                        });
                     }
                 }
             });
