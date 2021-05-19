@@ -1,7 +1,6 @@
 import peerjs from "./peerjs";
 
 const peer = peerjs.peerConnection();
-var videoContainer: any = null;
 
 export const getAudioPermissions = (successCallback: any, errorCallback: any) => {
     navigator.mediaDevices.getUserMedia(
@@ -62,14 +61,13 @@ export const onReceiveCall = (call: any) => {
 
 export const onReceiveVideoStream = (caller: string, stream: any) => {
     try {
-        videoContainer = document.getElementById(caller);
+        var videoContainer: any = document.getElementById(caller);
         if (videoContainer.srcObject === null) {
             videoContainer.srcObject = stream;
             videoContainer.onloadedmetadata = function (e: any) {
                 videoContainer.play();
             };
         }
-
     } catch (e: any) {
         console.log("ERROR", e);
     }
@@ -81,11 +79,10 @@ export const connectToEveryone = (members: any) => {
             members.map((item: any) => {
                 if (item.username !== localStorage.getItem("userid")) {
 
-                    videoContainer = document.getElementById(item.username);
+                    var videoContainer: any = document.getElementById(item.username);
                     if (videoContainer.srcObject === null) {
                         var call = peer.call(item.username, mediaStream);
                         call.on("stream", async (stream: any) => {
-
                             videoContainer.srcObject = stream;
                             videoContainer.onloadedmetadata = function (e: any) {
                                 videoContainer.play();
