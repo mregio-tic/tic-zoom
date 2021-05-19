@@ -63,6 +63,7 @@ export const onReceiveVideoStream = (caller: string, stream: any) => {
     try {
         var videoContainer: any = document.getElementById(caller);
         if (videoContainer.srcObject === null) {
+            console.log(caller);
             videoContainer.srcObject = stream;
             videoContainer.onloadedmetadata = function (e: any) {
                 videoContainer.play();
@@ -74,6 +75,8 @@ export const onReceiveVideoStream = (caller: string, stream: any) => {
 }
 
 export const connectToEveryone = (members: any) => {
+    var response = false;
+    console.log("Calling All");
     getAudioPermissions(
         async (mediaStream: any) => {
             members.map((item: any) => {
@@ -81,6 +84,7 @@ export const connectToEveryone = (members: any) => {
 
                     var videoContainer: any = document.getElementById(item.username);
                     if (videoContainer.srcObject === null) {
+                        console.log("Connect", item.username);
                         var call = peer.call(item.username, mediaStream);
                         call.on("stream", async (stream: any) => {
                             videoContainer.srcObject = stream;
@@ -92,12 +96,13 @@ export const connectToEveryone = (members: any) => {
                     }
                 }
             });
+            response = true;
         },
         async (err: any) => {
-
+            response = false;
         }
     );
-
+    return response;
 }
 
 export default {

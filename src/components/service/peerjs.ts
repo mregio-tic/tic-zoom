@@ -5,7 +5,7 @@ import callservice from "./callservice";
 var connectOptions = {
     host: "mak-webrtc-server.herokuapp.com",
     secure: true,
-    debug: 3,
+    debug: 0,
     config: {
         iceServers: [
             { urls: "stun:stun1.l.google.com:19302" },

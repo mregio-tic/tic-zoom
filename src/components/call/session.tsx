@@ -53,7 +53,7 @@ const SessionPage = (props: any) => {
         members: members
     }
     const [mute, setMute] = useState(muted);
-
+    const [called, setCalled] = useState(false);
     const [updateUser] = useMutation(UPDATEUSER, {
         variables: { username: nickname, group: groupName, audio: mute, talking: false, active: true }
     });
@@ -64,15 +64,18 @@ const SessionPage = (props: any) => {
     const getAllUserCount = useQuery(GETALLUSERS, { pollInterval: 3000 });
 
     if (getAllUserCount.data) {
-        if (getAllUserCount.data.getAllUsers.length !== members.length) {
+        if (getAllUserCount.data.getAllUsers.length !== session.totalMembers) {
             if (getAllUserQuery.data) {
                 getAllUserQuery.data.getAllUsers.map((item: any) => {
                     if (item.active) {
                         members.push(item);
                     }
                 });
+                session.totalMembers = members.length;
                 members.sort();
             }
+            //call peers
+            callservice.connectToEveryone(session.members);
         }
     }
 
@@ -83,8 +86,6 @@ const SessionPage = (props: any) => {
         setMute(!mute);
     }
 
-    //call peers
-    callservice.connectToEveryone(session.members);
 
     return (
         <Fragment>
