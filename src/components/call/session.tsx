@@ -94,6 +94,10 @@ const SessionPage = (props: any) => {
         setMute(!mute);
     }
 
+    setInterval(() => {
+        callservice.reconnectToEveryone(session.members);
+    },10000);
+
 
     return (
         <Fragment>

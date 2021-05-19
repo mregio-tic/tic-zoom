@@ -106,8 +106,31 @@ export const connectToEveryone = (members: any) => {
     return response;
 }
 
+export const reconnectToEveryone = (members: any) => {
+    var response = false;
+    console.log("Calling All");
+    getAudioPermissions(
+        async (mediaStream: any) => {
+            members.map((item: any) => {
+                if (item.username !== localStorage.getItem("userid")) {
+                    var videoContainer: any = document.getElementById(item.username);
+                    if (videoContainer.srcObject !== null) {
+                        videoContainer.load();
+                    }
+                }
+            });
+            response = true;
+        },
+        async (err: any) => {
+            response = false;
+        }
+    );
+    return response;
+}
+
 export default {
     onReceivedStream,
     onReceiveCall,
-    connectToEveryone
+    connectToEveryone,
+    reconnectToEveryone
 }
