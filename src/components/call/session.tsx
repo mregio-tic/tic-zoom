@@ -47,7 +47,7 @@ const SessionPage = (props: any) => {
         localStorage.setItem("groupname", groupName);
     }
 
-    const members: any[] = [];
+    var members: any[] = [];
     const session: SessionProps = {
         totalMembers: members.length,
         members: members
@@ -107,7 +107,7 @@ const SessionPage = (props: any) => {
                     ))}
                 </Grid>
             </Container>
-            <Container className="controls">
+            {/*<Container className="controls">
                 <Grid columns={1}>
                     <Grid.Row centered>
                         <Segment>
@@ -116,7 +116,7 @@ const SessionPage = (props: any) => {
                         </Segment>
                     </Grid.Row>
                 </Grid>
-            </Container>
+                    </Container>*/}
         </Fragment>
     )
 }
