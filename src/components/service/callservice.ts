@@ -80,17 +80,19 @@ export const connectToEveryone = (members: any) => {
         async (mediaStream: any) => {
             members.map((item: any) => {
                 if (item.username !== localStorage.getItem("userid")) {
-                    var call = peer.call(item.username, mediaStream);
-                    call.on("stream", async (stream: any) => {
-                        videoContainer = document.getElementById(item.username);
-                        if (videoContainer.srcObject === null) {
+
+                    videoContainer = document.getElementById(item.username);
+                    if (videoContainer.srcObject === null) {
+                        var call = peer.call(item.username, mediaStream);
+                        call.on("stream", async (stream: any) => {
+
                             videoContainer.srcObject = stream;
                             videoContainer.onloadedmetadata = function (e: any) {
                                 videoContainer.play();
                             };
-                        }
-
-                    });
+    
+                        });
+                    }
                 }
             });
         },
