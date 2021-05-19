@@ -1,3 +1,8 @@
+import peerjs from "./peerjs";
+
+const peer = peerjs.peerConnection();
+var videoContainer: any = null;
+
 export const getAudioPermissions = (successCallback: any, errorCallback: any) => {
     navigator.mediaDevices.getUserMedia(
         {
@@ -32,19 +37,17 @@ export const onReceivedStream = async (stream: any) => {
 
 export const onReceiveCall = (call: any) => {
     getAudioPermissions(
-        async (MediaStream: any) => {
+        async (mediaStream: any) => {
             console.log("answering call....");
             try {
-                call.answer(MediaStream);
+                call.answer(mediaStream);
 
                 call.on("stream", (stream: any) => {
-                    onReceivedStream(stream);
-                    ///*onReceiveVideoStream(stream);
+                    //onReceivedStream(stream);
+                    onReceiveVideoStream(call.peer, stream);
                 });
 
             } catch (e: any) {
-                window.alert("Your permission is needed to proceed Talk.");
-                window.location.reload();
                 console.log(e);
             }
 
@@ -57,25 +60,48 @@ export const onReceiveCall = (call: any) => {
     );
 };
 
-export const onReceiveVideoCall = (stream: any) => {
+export const onReceiveVideoStream = (caller: string, stream: any) => {
     try {
-        
+        videoContainer = document.getElementById(caller);
+        if (videoContainer.srcObject === null) {
+            videoContainer.srcObject = stream;
+            videoContainer.onloadedmetadata = function (e: any) {
+                videoContainer.play();
+            };
+        }
+
     } catch (e: any) {
-        alert("Something went wrong. (code:100)");
-        window.location.reload();
+        console.log("ERROR", e);
     }
 }
 
 export const connectToEveryone = (members: any) => {
-    members.map((item: any) => {
-        if (item.username !== localStorage.getItem("userid")) {
-            console.log("Member", item);
+    getAudioPermissions(
+        async (mediaStream: any) => {
+            members.map((item: any) => {
+                if (item.username !== localStorage.getItem("userid")) {
+                    var call = peer.call(item.username, mediaStream);
+                    call.on("stream", async (stream: any) => {
+                        videoContainer = document.getElementById(item.username);
+                        if (videoContainer.srcObject === null) {
+                            videoContainer.srcObject = stream;
+                            videoContainer.onloadedmetadata = function (e: any) {
+                                videoContainer.play();
+                            };
+                        }
+
+                    });
+                }
+            });
+        },
+        async (err: any) => {
+
         }
-    });
+    );
+
 }
 
 export default {
-    getAudioPermissions,
     onReceivedStream,
     onReceiveCall,
     connectToEveryone

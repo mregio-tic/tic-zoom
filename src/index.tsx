@@ -3,20 +3,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Main from './main';
 import reportWebVitals from './reportWebVitals';
-import {onError} from "@apollo/client/link/error";
+import { onError } from "@apollo/client/link/error";
 import * as https from "https";
 //graphql server
-const errorLink = onError(({ graphQLErrors, networkError}) => {
-  if(graphQLErrors) {
-    graphQLErrors.map(({message, path}) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message, path }) => {
       console.log("GraphQL Error:", message)
+
+      window.location.replace("/");
+
       return null;
     });
   }
 })
 const link = from([
   errorLink,
-  new HttpLink({uri: "https://tic-zoom-api.herokuapp.com/graphql"}),
+  new HttpLink({ uri: "https://tic-zoom-api.herokuapp.com/graphql" }),
 ])
 const client = new ApolloClient({
   link: link,

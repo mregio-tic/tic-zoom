@@ -28,6 +28,10 @@ interface SessionProps {
     members: any[],
 }
 
+const videoConstraints = {
+    facingMode: "user"
+};
+
 const SessionPage = (props: any) => {
     var nickname = params.get("nickname");
     var groupName = params.get("group");
@@ -49,22 +53,30 @@ const SessionPage = (props: any) => {
         members: members
     }
     const [mute, setMute] = useState(muted);
-    
+
     const [updateUser] = useMutation(UPDATEUSER, {
         variables: { username: nickname, group: groupName, audio: mute, talking: false, active: true }
     });
     //active session
     updateUser();
 
-    const getAllUserQuery = useQuery(GETALLUSERS, {pollInterval: 3000})
-    
-    if (getAllUserQuery.data) {
-        getAllUserQuery.data.getAllUsers.map((item: any) => {
-            if (item.active) {
-                members.push(item);
+    const getAllUserQuery = useQuery(GETALLUSERS);
+    const getAllUserCount = useQuery(GETALLUSERS, { pollInterval: 3000 });
+
+    if (getAllUserCount.data) {
+        if (getAllUserCount.data.getAllUsers.length !== members.length) {
+            if (getAllUserQuery.data) {
+                getAllUserQuery.data.getAllUsers.map((item: any) => {
+                    if (item.active) {
+                        members.push(item);
+                    }
+                });
+                members.sort();
             }
-        });
+        }
     }
+
+
 
     const muteDevice = () => {
         updateUser();
@@ -80,17 +92,18 @@ const SessionPage = (props: any) => {
                 <Grid>
                     {session.members.map((item: any) => (
                         (nickname == item.username) ?
-                        <div key={item.id} className={item.talking ? "card-talking" : "card"}>
-                            <Webcam audio={item.audio}
-                                width="100%"
-                                screenshotFormat="image/jpeg" />
-                            <h5 className="name">{item.username}</h5>
-                        </div>
-                        : 
-                        <div key={item.id} className={item.talking ? "card-talking" : "card"}>
-                            <video id={item.username} autoPlay></video>
-                            <h5 className="name">{item.username}</h5>
-                        </div>
+                            <div className={item.talking ? "card-talking" : "card"}>
+                                <Webcam key={item.id} audio={item.audio}
+                                    screenshotFormat="image/jpeg"
+                                    width="100%" height="80%"
+                                    videoConstraints={videoConstraints} />
+                                <h5 className="name">{item.username}</h5>
+                            </div>
+                            :
+                            <div key={item.id} className={item.talking ? "card-talking" : "card"}>
+                                <video id={item.username} width="100%" height="80%" autoPlay></video>
+                                <h5 className="name">{item.username}</h5>
+                            </div>
                     ))}
                 </Grid>
             </Container>

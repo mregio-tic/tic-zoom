@@ -37,20 +37,21 @@ body {
 
 .card {
     background-color: $stackColor;
-    padding: 10px;
+    padding: 5px;
     width: 300px;
+    height: 300px;
     margin:5px;
 }
 
 .card-talking {
     background-color: $stackActive;
-    padding: 10px;
+    padding: 5px;
     width: 300px;
+    height: 300px;
     margin:5px;
 }
 
 .controls {
-    position: absolute;
     width:100%;
     bottom: 0;
     right: 0;

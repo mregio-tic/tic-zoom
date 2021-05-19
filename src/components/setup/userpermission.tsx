@@ -32,8 +32,13 @@ const SetupPage = (props: any) => {
         });
     }
 
+    const videoConstraints = {
+        width: 1020,
+        height: 1020,
+        facingMode: "user"
+    };
     const [updateUser] = useMutation(UPDATEUSER, {
-        variables: { username: nickname, group: groupName, audio: mute, talking: false, active: false }    
+        variables: { username: nickname, group: groupName, audio: mute, talking: false, active: false }
     });
 
     const callPage = () => {
@@ -54,7 +59,8 @@ const SetupPage = (props: any) => {
                 <Segment className="purple" raised>
                     <Webcam audio={mute}
                         width="100%"
-                        screenshotFormat="image/jpeg"/>
+                        videoConstraints={videoConstraints}
+                        screenshotFormat="image/jpeg" />
                 </Segment>
                 <Grid columns={1}>
                     <Grid.Row centered>
