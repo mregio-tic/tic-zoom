@@ -83,17 +83,15 @@ export const connectToEveryone = (members: any) => {
                 if (item.username !== localStorage.getItem("userid")) {
 
                     var videoContainer: any = document.getElementById(item.username);
-                    if (videoContainer.srcObject === null) {
-                        console.log("Connect", item.username);
-                        var call = peer.call(item.username, mediaStream);
-                        call.on("stream", async (stream: any) => {
-                            videoContainer.srcObject = stream;
-                            videoContainer.onloadedmetadata = function (e: any) {
-                                videoContainer.play();
-                            };
-    
-                        });
-                    }
+                    console.log("Connect", item.username);
+                    var call = peer.call(item.username, mediaStream);
+                    call.on("stream", async (stream: any) => {
+                        videoContainer.srcObject = stream;
+                        videoContainer.onloadedmetadata = function (e: any) {
+                            videoContainer.play();
+                        };
+
+                    });
                 }
             });
             response = true;
